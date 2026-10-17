@@ -1,0 +1,13 @@
+REPORTE DEL DATAFRAME TRANSFORMADO
+============================================================
+Filas: 3506
+Columnas: 2
+Duplicados: 0
+
+Columnas y tipos:
+- url: str
+- text: str
+
+Valores nulos por columna:
+- url: 0
+- text: 0

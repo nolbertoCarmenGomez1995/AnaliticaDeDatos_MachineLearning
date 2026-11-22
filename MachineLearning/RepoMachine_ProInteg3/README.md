@@ -87,8 +87,8 @@ La ejecución genera:
 - `reportes/actividad3_goodreads.txt`: resumen automático con pregunta,
   dataset, preprocesamiento, configuración, fecha y métricas.
 - `reportes/hallazgos_actividad3.md`: interpretación y recomendación generadas
-  localmente con los resultados de esa ejecución. Está excluido de Git; en
-  GitHub se incluye como parte del artefacto de Actions.
+  automáticamente con los resultados de esa ejecución. Se conserva en el
+  repositorio y también se incluye en el artefacto de Actions.
 - `reportes/figuras/`: curva silhouette y visualización de los segmentos,
   enlazadas desde el documento de hallazgos.
 - `modelos/libros/kmeans_actividad3_goodreads.joblib`: pipeline entrenado;
@@ -99,18 +99,35 @@ El workflow
 raíz del workspace, se activa en cada `push` a `main`. Ejecuta pruebas,
 descarga el dataset, prepara datos, evalúa y ajusta
 un K-Means y publica resumen, hallazgos, gráficas y modelo como artefacto.
-Actualiza en `main` el `.txt` y las gráficas; el `.md` se entrega dentro del
-artefacto, pero no se versiona en el repositorio. Para la entrega
-de Canvas aún se debe enlazar una ejecución exitosa de Actions y confirmar que
-el docente pueda acceder al repositorio.
+Actualiza en `main` el `.txt`, el `.md` y las gráficas. El `.joblib` y los
+archivos grandes se publican como artefacto descargable. Para la entrega de
+Canvas se debe enlazar una ejecución exitosa de Actions y confirmar que el
+docente pueda acceder al repositorio.
+
+### Cumplimiento de los seis componentes
+
+1. **Pregunta y DataFrame:** la pregunta, el beneficiario, la decisión y el
+   dataset se documentan arriba y se cargan automáticamente desde Hugging
+   Face.
+2. **Preprocesamiento:** el código registra filas originales, limpieza,
+   duplicados, faltantes, filtros y valla IQR antes del modelo.
+3. **Modelo:** K-Means es el único modelo evaluado. Se explica su mecanismo,
+   sus variables, ventajas y limitaciones.
+4. **Entrenamiento y evaluación:** se ajustan imputación y escalado solo con
+   entrenamiento; se comparan `k=2,3,4,5,6` con silhouette y se informan
+   Davies-Bouldin e inercia.
+5. **Resumen y hallazgos:** el flujo escribe automáticamente el `.txt`, el
+   documento `.md` y las figuras con resultados de la ejecución.
+6. **GitHub Actions:** el workflow descarga el dataset, ejecuta pruebas,
+   prepara datos, entrena y evalúa el modelo, publica artefactos y actualiza
+   la copia de resultados en `main`.
 
 ## Material de Machine Learning
 
 `src/regresion_lineal.py` y `src/clasificador_text.py` contienen las clases de
-regresion y clasificacion. Los notebooks `Semana_1SINC.ipynb`,
-`Semana_2SINC.ipynb` y `Semana_3SINC.ipynb` conservan los ejemplos originales
-del curso; usan otros datasets e imports desde `clases_po`, que no existe en
-esta estructura, por lo que se mantienen como referencia.
+regresion y clasificacion. Los notebooks `Semana_1SINC.ipynb` y `Semana_2SINC.ipynb` conservan los ejemplos originales
+del curso y ahora importan las clases disponibles en `src/`. Usan el dataset
+Fast Food para practicar y no forman parte del flujo de entrega de Goodreads.
 
 `sincronicas/Semana_3_LIBROS.ipynb` adapta el análisis de la semana 3 a Goodreads:
 explora el dataset, deriva categorías de calificación para clasificación de
@@ -137,6 +154,36 @@ con `python -m unittest discover -s tests -v`.
 La Actividad 3 de esta carpeta es el ejercicio de segmentación K-Means. No es
 la AE3 descriptiva de Proyecto Integrado, cuyos archivos están en
 `../../ProyectoIntegrado/AE3/`.
+
+## Prácticas avanzadas: redes neuronales y transformers
+
+### Semana 6 — Red neuronal tabular
+
+`src/red_neuronal_goodreads.py` adapta el perceptrón multicapa de la clase a
+Goodreads. Predice una categoría didáctica: `alta_calificacion`, igual a 1
+cuando `average_rating >= 4.2`. La calificación original se elimina de las
+predictoras; las características son páginas, conteo de calificaciones,
+conteo de reseñas y número de ediciones.
+
+Se usa `MLPClassifier` con dos capas ocultas de 32 y 16 neuronas, activación
+ReLU, optimizador Adam y escalado estándar. Se reservan datos de prueba antes
+del ajuste y se reportan exactitud, exactitud balanceada, precisión, recall,
+F1 y matriz de confusión.
+
+### Semana 7 — Atención y transformer
+
+`src/transformer_goodreads.py` adapta el tema de transformer a clasificación
+de títulos. Implementa embeddings, atención multi-cabeza, pooling y una salida
+binaria en PyTorch. La regla objetivo es la misma categoría didáctica
+`average_rating >= 4.2`; el modelo recibe únicamente el título normalizado,
+nunca la calificación ni variables que revelen directamente el objetivo.
+
+El mini-transformer permite observar cómo los tokens reciben pesos de atención,
+pero no es un modelo grande de producción. Es una práctica de cómo funcionan
+embedding, consultas, claves, valores y agregación.
+
+`src/modelos_avanzados_goodreads.py` ejecuta ambas prácticas y escribe
+`reportes/modelos_avanzados_goodreads.txt`.
 
 ## Estructura
 

@@ -1,0 +1,25 @@
+RESUMEN — RED NEURONAL Y TRANSFORMER GOODREADS
+==============================================================
+Fecha de ejecución: 2026-11-22T13:03:05-05:00
+Dataset: pfaha/goodreads-books, split train.
+Variable objetivo didáctica: alta_calificacion = 1 cuando average_rating >= 4.2.
+La calificación original no se incluye como predictora.
+
+SEMANA 6 — RED NEURONAL MLP
+Tipo: clasificación supervisada.
+Modelo único de esta práctica: MLPClassifier.
+Variables predictoras: paginas, cantidad_calificaciones, cantidad_resenas, cantidad_ediciones.
+Preprocesamiento: imputación mediana y escalado ajustados con entrenamiento.
+Arquitectura: (32, 16); activación=relu; semilla=42.
+Métricas: {'accuracy': 0.713, 'balanced_accuracy': 0.5024256292906178, 'precision': 0.5714285714285714, 'recall': 0.006956521739130435, 'f1': 0.013745704467353952, 'train_rows': 16000, 'test_rows': 4000, 'confusion_matrix': [[2844, 6], [1142, 8]], 'positive_rate': 0.2875}
+
+SEMANA 7 — MINI-TRANSFORMER
+Tipo: clasificación supervisada de texto.
+Modelo: embeddings + atención multi-cabeza + clasificación.
+Predictor: título normalizado; no se utilizan calificación ni conteos.
+Configuración: 4 cabezas, 3 épocas, longitud máxima 24, vocabulario máximo 5000.
+Métricas: {'accuracy': 0.71, 'f1': 0.0, 'train_rows': 9600, 'test_rows': 2400, 'confusion_matrix': [[1704, 0], [696, 0]]}
+
+Interpretación: comparar siempre con el baseline de predecir la clase mayoritaria. Una exactitud alta puede ocultar bajo recall si las clases están desbalanceadas.
+
+Limitación: son prácticas de clase adaptadas a Goodreads; no reemplazan la validación comercial ni demuestran causalidad.

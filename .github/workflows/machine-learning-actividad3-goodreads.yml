@@ -57,12 +57,19 @@ jobs:
           cp -R reportes/figuras artifacts/
           cp modelos/libros/kmeans_actividad3_goodreads.joblib artifacts/
 
+      - name: Ejecutar prácticas de redes neuronales y transformer
+        working-directory: MachineLearning/RepoMachine_ProInteg3
+        run: |
+          python -m src.modelos_avanzados_goodreads
+          cp reportes/modelos_avanzados_goodreads.txt artifacts/
+
       - name: Guardar copia actualizada del resumen en main
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add MachineLearning/RepoMachine_ProInteg3/reportes/actividad3_goodreads.txt \
+            MachineLearning/RepoMachine_ProInteg3/reportes/hallazgos_actividad3.md \
             MachineLearning/RepoMachine_ProInteg3/reportes/figuras/*.png
 
           if git diff --cached --quiet; then
@@ -82,6 +89,7 @@ jobs:
           path: |
             MachineLearning/RepoMachine_ProInteg3/artifacts/actividad3_goodreads.txt
             MachineLearning/RepoMachine_ProInteg3/artifacts/hallazgos_actividad3.md
+            MachineLearning/RepoMachine_ProInteg3/artifacts/modelos_avanzados_goodreads.txt
             MachineLearning/RepoMachine_ProInteg3/artifacts/figuras/*.png
             MachineLearning/RepoMachine_ProInteg3/artifacts/kmeans_actividad3_goodreads.joblib
           if-no-files-found: error

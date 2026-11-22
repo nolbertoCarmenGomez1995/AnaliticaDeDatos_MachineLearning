@@ -82,7 +82,6 @@ target/
 # Modelos generados por los notebooks de entrenamiento
 /modelos/libros/
 /sincronicas/entrenamiento/
-/reportes/hallazgos_actividad3.md
 
 # IPython
 profile_default/

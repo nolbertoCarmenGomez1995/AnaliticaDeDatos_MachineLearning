@@ -1,0 +1,80 @@
+name: Ejecutar Actividad 1
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: workspace-reportes-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ejecutar-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sincronizar con main
+        run: |
+          git fetch origin main
+          git merge --ff-only origin/main
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ProyectoIntegrado/requirements.txt
+
+      - name: Crear entorno virtual
+        run: python -m venv .venv
+        working-directory: ProyectoIntegrado
+
+      - name: Instalar dependencias
+        working-directory: ProyectoIntegrado
+        run: |
+          source .venv/bin/activate
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -r requirements.txt
+
+      - name: Limpiar reportes generados
+        working-directory: ProyectoIntegrado
+        run: |
+          mkdir -p reportes
+          rm -f reportes/goodreads_books.txt
+
+      - name: Ejecutar actividad1.ipynb
+        working-directory: ProyectoIntegrado
+        run: |
+          source .venv/bin/activate
+          jupyter nbconvert \
+            --to notebook \
+            --execute \
+            --inplace \
+            --ExecutePreprocessor.timeout=1800 \
+            actividad1.ipynb
+
+      - name: Confirmar cambios generados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ProyectoIntegrado/reportes/goodreads_books.txt \
+            ProyectoIntegrado/actividad1.ipynb
+
+          if git diff --cached --quiet; then
+            echo "No se generaron cambios."
+            exit 0
+          fi
+
+          git commit -m "chore: actualizar resultados de Actividad 1 [skip ci]"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main

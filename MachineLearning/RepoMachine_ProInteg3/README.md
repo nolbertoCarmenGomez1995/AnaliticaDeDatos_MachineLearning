@@ -1,4 +1,4 @@
-# RepoMachine_ProInteg3
+# Machine Learning
 
 ## Actividad 3 — Segmentación de libros con Goodreads
 
@@ -72,7 +72,7 @@ escala física; por eso los resultados no representan todo Goodreads.
 
 ### Ejecución y archivos generados
 
-Desde la raíz del repositorio:
+Desde la carpeta `MachineLearning/RepoMachine_ProInteg3`:
 
 ```powershell
 python -m venv .venv
@@ -95,28 +95,16 @@ La ejecución genera:
   esta carpeta está excluida de Git.
 
 El workflow
-`.github/workflows/ejecutar-actividad3-goodreads.yml` se activa en cada `push` a
-`main`. Ejecuta pruebas, descarga el dataset, prepara datos, evalúa y ajusta
+`.github/workflows/machine-learning-actividad3-goodreads.yml`, ubicado en la
+raíz del workspace, se activa en cada `push` a `main`. Ejecuta pruebas,
+descarga el dataset, prepara datos, evalúa y ajusta
 un K-Means y publica resumen, hallazgos, gráficas y modelo como artefacto.
 Actualiza en `main` el `.txt` y las gráficas; el `.md` se entrega dentro del
 artefacto, pero no se versiona en el repositorio. Para la entrega
 de Canvas aún se debe enlazar una ejecución exitosa de Actions y confirmar que
 el docente pueda acceder al repositorio.
 
-Repositorio de trabajo para Proyecto Integrado III y Machine Learning.
-
-## Proyecto Integrado III
-
-La actividad propia de este repositorio esta en `actividad1.ipynb`. Carga el
-dataset `pfaha/goodreads-books` desde Hugging Face, selecciona y transforma
-columnas de libros, filtra calificaciones y guarda reportes en `reportes/`.
-La auditoria de calidad conserva y señala los faltantes de campos opcionales
-en vez de descartar esas filas.
-
-El notebook utiliza `HFDatasetLoader` y `Reportes`, implementados en
-`src/hf_loader.py` y `src/reportes.py`.
-
-## Machine Learning
+## Material de Machine Learning
 
 `src/regresion_lineal.py` y `src/clasificador_text.py` contienen las clases de
 regresion y clasificacion. Los notebooks `Semana_1SINC.ipynb`,
@@ -146,10 +134,13 @@ auditoría informa faltantes, duplicados y páginas atípicas sin eliminarlas
 globalmente; cada modelo aplica sus propios filtros. Las reglas se verifican
 con `python -m unittest discover -s tests -v`.
 
+La Actividad 3 de esta carpeta es el ejercicio de segmentación K-Means. No es
+la AE3 descriptiva de Proyecto Integrado, cuyos archivos están en
+`../../ProyectoIntegrado/AE3/`.
+
 ## Estructura
 
 ```text
-actividad1.ipynb                 Actividad propia con Goodreads
 sincronicas/Semana_3_LIBROS.ipynb Práctica de clasificación y regresión
 sincronicas/Semana_4_LIBROS.ipynb Semana 4: clasificación tabular
 sincronicas/Semana_5_LIBROS.ipynb Semana 5: agrupamiento K-Means
@@ -160,23 +151,24 @@ src/reportes.py                  Generacion de reportes
 src/regresion_lineal.py          Clase de regresion lineal
 src/clasificador_text.py         Clase de clasificacion de texto
 sincronicas/                     Material de las sesiones del curso
-reportes/goodreads_books.txt     Reporte generado por la actividad
+reportes/resumen_modelos_libros.txt Reporte de práctica
 reportes/actividad3_goodreads.txt Resumen final de la Actividad 3
 reportes/hallazgos_actividad3.md Hallazgos locales (ignorado por Git)
 tests/                           Pruebas de preparación y auditoría
 requirements.txt                 Dependencias del proyecto
 ```
 
-## Entorno y ejecucion
+## Entorno y ejecución
 
-Desde la raiz del repositorio, en Windows PowerShell:
+En Windows PowerShell, desde la raíz del workspace:
 
 ```powershell
+Set-Location MachineLearning\RepoMachine_ProInteg3
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-jupyter notebook actividad1.ipynb
+jupyter notebook sincronicas\Semana_3_LIBROS.ipynb
 ```
 
 Para ejecutar manualmente la Actividad 3 y generar el resumen:
@@ -187,5 +179,8 @@ python -m src.actividad3_goodreads
 
 La carga de Goodreads requiere internet. El workflow de Actividad 3 se activa
 al hacer `push` a `main`, ejecuta las pruebas y el flujo de K-Means, y publica
-resumen, hallazgos, gráficas y modelo como artefacto descargable. En `main`
-actualiza el resumen y el documento de hallazgos generados automáticamente.
+resumen, hallazgos, gráficas y modelo como artefacto descargable. El resumen y
+las gráficas se actualizan en `main`; el documento de hallazgos se entrega
+dentro del artefacto, pero no se versiona en el repositorio. El workflow está
+en la raíz del workspace:
+`.github/workflows/machine-learning-actividad3-goodreads.yml`.
